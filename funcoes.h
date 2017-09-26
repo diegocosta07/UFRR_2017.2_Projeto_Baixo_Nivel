@@ -12,3 +12,4 @@ typedef struct
 Linha* nova_linha();
 void abrir_arquivo(Linha* lin);
 void identificador_tokens(char* linha, Linha* lin);
+void registrador(int* reg, char* token);

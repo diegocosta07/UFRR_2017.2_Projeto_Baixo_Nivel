@@ -19,18 +19,19 @@ void identificador_tokens(char* linha, Linha* lin) {
 
 	/*instrução do formato R*/
 	if((strcmp("add",token) == 0) || strcmp("sub",token) == 0) {
-		lin->op = 0;
+		lin->op = ADD;
 
 		/*então separa os tokens*/
 		
 		token = strtok(NULL,idreg);
-		printf("%d\n", token);
-		lin->rd = token;
+		//printf("%s\n", token);
+		registrador(&lin->rd,token);
 		token = strtok(NULL,idreg);
-		lin->rs = token;
+		registrador(&lin->rs,token);
 		token = strtok(NULL,idreg);
-		lin->rt = token;
+		registrador(&lin->rt,token);
 	}
+
 }
 
 void abrir_arquivo(Linha* lin) {
@@ -43,4 +44,40 @@ void abrir_arquivo(Linha* lin) {
 		identificador_tokens(linha,lin); //separa os tokens da instrução
 	}
 	fclose(arq);
+}
+
+void registrador(int* reg, char* token) {
+	if (strcmp("$t0",token) == 0)
+		*reg = $t0;
+	else if (strcmp("$t1",token) == 0)
+		*reg = $t1;
+	else if (strcmp("$t2",token) == 0)
+		*reg = $t2;
+	else if (strcmp("$t3",token) == 0)
+		*reg = $t3;
+	else if (strcmp("$t4",token) == 0)
+		*reg = $t4;
+	else if (strcmp("$t5",token) == 0)
+		*reg = $t5;
+	else if (strcmp("$t6",token) == 0)
+		*reg = $t6;
+	else if (strcmp("$t7",token) == 0)
+		*reg = $t7;
+
+	else if (strcmp("$s0",token) == 0)
+		*reg = $s0;
+	else if (strcmp("$s1",token) == 0)
+		*reg = $s1;
+	else if (strcmp("$s2",token) == 0)
+		*reg = $s2;
+	else if (strcmp("$t3",token) == 0)
+		*reg = $s3;
+	else if (strcmp("$s4",token) == 0)
+		*reg = $s4;
+	else if (strcmp("$s5",token) == 0)
+		*reg = $s5;
+	else if (strcmp("$s6",token) == 0)
+		*reg = $s6;
+	else if (strcmp("$s7",token) == 0)
+		*reg = $s7;
 }

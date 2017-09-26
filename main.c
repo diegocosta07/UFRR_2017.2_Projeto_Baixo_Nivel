@@ -8,7 +8,7 @@ int main() {
 	Linha* instruc = nova_linha();
 	abrir_arquivo(instruc);
 
-	printf("op %d\n rs %d\n rt %dn rd %d\n",instruc->op, instruc->rs, instruc->rt, instruc->rd);
+	printf("op %d\n rs %d\n rt %d\n rd %d\n",instruc->op, instruc->rs, instruc->rt, instruc->rd);
 
 	free(instruc);
 }
