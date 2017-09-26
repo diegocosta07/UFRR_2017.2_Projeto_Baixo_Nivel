@@ -1,11 +1,14 @@
-typedef struct {
-	char instrucao[5];
-	char regSRC[3];
-	char reg1[3];
-	char reg2[3];
+typedef struct
+{
+	int op; //opereção basica da instrução
+	int rs; //registrador do primeiro operando fonte
+	int rt; //registrador do segundo operando fonte
+	int rd; //registrador do operando de destino
+	int shamt; //shift amount(quantidade de deslocamento)
+	int funct; //variante específica da operação op 
+	int endereco; 
 } Linha;
 
-void abrir_arquivo(Linha);
-Linha* cria_linha();
-void salvar(char str[],Linha* l);
-sep_inst(char lin[],Linha* l);
+Linha* nova_linha();
+void abrir_arquivo(Linha* lin);
+void identificador_tokens(char* linha, Linha* lin);

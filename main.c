@@ -3,8 +3,12 @@
 #include "funcoes.h"
 
 int main() {
-	Linha *l = cria_linha();
-	abrir_arquivo(l);
-	printf("instrucao salva %s\n",l->instrucao);
-	free(l);
+	printf("Tamanho do tipo int nessa arquitetura: %d\n", sizeof(int));
+
+	Linha* instruc = nova_linha();
+	abrir_arquivo(instruc);
+
+	printf("op %d\n rs %d\n rt %dn rd %d\n",instruc->op, instruc->rs, instruc->rt, instruc->rd);
+
+	free(instruc);
 }
