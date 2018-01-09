@@ -1,0 +1,21 @@
+Para a correta execução deste montador é necessário que o arquivo a ser codificado tenha o nome "mips.txt" e deve estar dentro do mesmo diretório que o executavel do montador.
+São suportadas apenas as seguintes instruções:
+add
+addi
+mult
+sub
+slt
+slti
+sll
+srl
+lw
+sw
+bne
+beq
+j
+jal
+jr
+Todos os registradores são suportados.
+
+Siga o exemplo de formatação do arquivo de exemplo chamado "exemplo_formatacao.txt".
+O codigo hexaxdecimal gerado pelo montador será salvo em um arquivo chamado "resultado.txt" localizado no mesmo diretório do montador.

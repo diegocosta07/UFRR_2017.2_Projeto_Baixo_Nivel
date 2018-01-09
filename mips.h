@@ -1,6 +1,22 @@
 #define ADD 0
+#define ADDI 8
+#define MULT 0
+#define SUB 0
+#define SLT 0 
+#define SLTI 10
+#define SLL 0
+#define SRL 0
+#define LW 35
+#define SW 43
+#define BNE 5
+#define BEQ 4
+#define J 2
+#define JAL 3
+#define JR 0
+
 
 #define $zero 0
+#define $0 0
 #define $at 1
 #define $v0 2
 #define $v1 3
