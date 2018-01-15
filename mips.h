@@ -13,7 +13,12 @@
 #define J 2
 #define JAL 3
 #define JR 0
-
+#define AND 0
+#define ANDI 12
+#define ORI 13
+#define OR 0
+#define SB 40
+#define LB 32
 
 #define $zero 0
 #define $0 0

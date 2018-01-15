@@ -55,6 +55,7 @@ int identificador_tokens(char* linha, Linha* lin, int addr, FILE* res) {
 
 	/*instrução do formato R addi*/
 	else if(strcmp("addi",token) == 0 || strcmp("\taddi",token) == 0) {
+		int imediato; //variavel para receber o valor imediao
 		lin->op = ADDI;
 		/*então separa os tokens*/
 
@@ -63,7 +64,62 @@ int identificador_tokens(char* linha, Linha* lin, int addr, FILE* res) {
 		token = strtok(NULL,idreg);
 		registrador(&lin->rs,token);
 		token = strtok(NULL,"\n");
-		lin->imediato = atoi(token);
+		imediato = atoi(token);
+		//caso o imediado seja neativo é necessário inverter os bits
+		if (imediato < 0) {
+			int i;
+			for (i=16;i<32;i++) {
+				imediato ^= (1 << i); //invertendo os bits 16 ao 32 para ficarem com 0
+			}
+		}
+		lin->imediato = imediato;
+		salvar_arquivo(lin,addr,res);
+	} 
+
+	else if(strcmp("andi",token) == 0 || strcmp("\tandi",token) == 0) {
+		int imediato;
+		lin->op = ANDI;
+		/*então separa os tokens*/
+
+		token = strtok(NULL,idreg);
+		registrador(&lin->rt,token);
+		token = strtok(NULL,idreg);
+		registrador(&lin->rs,token);
+		token = strtok(NULL,"\n");
+		
+		imediato = atoi(token);
+		//caso o imediado seja neativo é necessário inverter os bits
+		if (imediato < 0) {
+			int i;
+			for (i=16;i<32;i++) {
+				imediato ^= (1 << i); //invertendo os bits 16 ao 32 para ficarem com 0
+			}
+		}
+		lin->imediato = imediato;
+
+		salvar_arquivo(lin,addr,res);
+	} 
+
+	else if(strcmp("ori",token) == 0 || strcmp("\tori",token) == 0) {
+		int imediato;
+		lin->op = ORI;
+		/*então separa os tokens*/
+
+		token = strtok(NULL,idreg);
+		registrador(&lin->rt,token);
+		token = strtok(NULL,idreg);
+		registrador(&lin->rs,token);
+		token = strtok(NULL,"\n");
+		
+		imediato = atoi(token);
+		//caso o imediado seja neativo é necessário inverter os bits
+		if (imediato < 0) {
+			int i;
+			for (i=16;i<32;i++) {
+				imediato ^= (1 << i); //invertendo os bits 16 ao 32 para ficarem com 0
+			}
+		}
+		lin->imediato = imediato;
 
 		salvar_arquivo(lin,addr,res);
 	} 
@@ -99,6 +155,38 @@ int identificador_tokens(char* linha, Linha* lin, int addr, FILE* res) {
 		salvar_arquivo(lin,addr,res);
 	}
 
+	else if(strcmp("and",token) == 0  || strcmp("\tand",token) == 0) {
+		lin->op = AND;
+		lin->shamt = 0;
+		lin->funct = 36;
+		/*então separa os tokens*/
+		
+		token = strtok(NULL,idreg);
+		registrador(&lin->rd,token);
+		token = strtok(NULL,idreg);
+		registrador(&lin->rs,token);
+		token = strtok(NULL,"\n");
+		registrador(&lin->rt,token);
+
+		salvar_arquivo(lin,addr,res);
+	}
+
+	else if(strcmp("or",token) == 0  || strcmp("\tor",token) == 0) {
+		lin->op = OR;
+		lin->shamt = 0;
+		lin->funct = 37;
+		/*então separa os tokens*/
+		
+		token = strtok(NULL,idreg);
+		registrador(&lin->rd,token);
+		token = strtok(NULL,idreg);
+		registrador(&lin->rs,token);
+		token = strtok(NULL,"\n");
+		registrador(&lin->rt,token);
+
+		salvar_arquivo(lin,addr,res);
+	}
+
 	/*instrução do formato R slt*/
 	else if(strcmp("slt",token) == 0 || strcmp("\tslt",token) == 0) {
 		lin->op = SLT;
@@ -117,6 +205,7 @@ int identificador_tokens(char* linha, Linha* lin, int addr, FILE* res) {
 	}
 
 	else if(strcmp("slti",token) == 0 || strcmp("\tslti",token) == 0) {
+		int imediato;
 		lin->op = SLTI;
 		/*então separa os tokens*/
 		
@@ -125,7 +214,16 @@ int identificador_tokens(char* linha, Linha* lin, int addr, FILE* res) {
 		token = strtok(NULL,idreg);
 		registrador(&lin->rs,token);
 		token = strtok(NULL,"\n");
-		lin->imediato = atoi(token);
+		
+		imediato = atoi(token);
+		//caso o imediado seja neativo é necessário inverter os bits
+		if (imediato < 0) {
+			int i;
+			for (i=16;i<32;i++) {
+				imediato ^= (1 << i); //invertendo os bits 16 ao 32 para ficarem com 0
+			}
+		}
+		lin->imediato = imediato;
 
 		salvar_arquivo(lin,addr,res);
 	}
@@ -240,6 +338,33 @@ int identificador_tokens(char* linha, Linha* lin, int addr, FILE* res) {
 
 		salvar_arquivo(lin,addr,res);
 	}
+
+	else if (strcmp("lb",token) == 0 || strcmp("\tlb",token) == 0) {
+		lin->op = LB;
+		token = strtok(NULL,idreg);
+		registrador(&lin->rt,token);
+
+		token = strtok(NULL,idend);
+		lin->endereco = atoi(token);//converte inteiro em string
+		token = strtok(NULL,")");
+		registrador(&lin->rs,token);
+
+		salvar_arquivo(lin,addr,res);
+	}
+
+	else if (strcmp("sb",token) == 0 || strcmp("\tsb",token) == 0) {
+		lin->op = SB;
+		token = strtok(NULL,idreg);
+		registrador(&lin->rt,token);
+
+		token = strtok(NULL,idend);
+		lin->endereco = atoi(token);//converte inteiro em string
+		token = strtok(NULL,")");
+		registrador(&lin->rs,token);
+
+		salvar_arquivo(lin,addr,res);
+	}
+
 	else {
 		return 0;
 	}
@@ -307,6 +432,18 @@ void linha_result(Linha* instruc,char* linha, int addr) {
 		b |= (instruc->rt << 16);
 		b |= (instruc->imediato << 0);
 		itoa(b,linha,16); // conversão para hexadecimal
+	} else if (instruc->op == ANDI) {
+		b = (ANDI << 26);
+		b |= (instruc->rs << 21);
+		b |= (instruc->rt << 16);
+		b |= (instruc->imediato << 0);
+		itoa(b,linha,16); // conversão para hexadecimal
+	} else if (instruc->op == ORI) {
+		b = (ORI << 26);
+		b |= (instruc->rs << 21);
+		b |= (instruc->rt << 16);
+		b |= (instruc->imediato << 0);
+		itoa(b,linha,16); // conversão para hexadecimal
 	} else if (instruc->op == SLTI) { 
 		b = (SLTI << 26);
 		b |= (instruc->rs << 21);
@@ -337,15 +474,27 @@ void linha_result(Linha* instruc,char* linha, int addr) {
 		b = (JAL << 26);
 		b |= (instruc->endereco >> 2);
 		itoa(b,linha,16);
+	} else if (instruc->op == LB) {
+		b = (LB << 26);
+		b |= (instruc->rs << 21);
+		b |= (instruc->rt << 16);
+		b |= (instruc->endereco >> 0);
+		itoa(b,linha,16);
+	} else if (instruc->op == SB) {
+		b = (SB << 26);
+		b |= (instruc->rs << 21);
+		b |= (instruc->rt << 16);
+		b |= (instruc->endereco >> 0);
+		itoa(b,linha,16);
 	}
 	printf("%s\n", linha);
 
 }
 
 
-void marcador_labels() {
+void marcador_labels(char* cod) {
 	FILE* labels = fopen("labels.txt","w"); //arquivo para salvar as labels e seus endereços
-	FILE* arq = fopen("mips.txt", "r"); // arquivo com codigo mips
+	FILE* arq = fopen(cod, "r"); // arquivo com codigo mips
 
 	int m_addr = 0x400024; //endereço da instrução
 	char linha[100];
@@ -374,7 +523,7 @@ void marcador_labels() {
 	
 } 
 
-void abrir_arquivo(Linha* lin) {
+void abrir_arquivo(Linha* lin, char* cod, char* save) {
 	char linha[100];
 	int n_linha = 0x400024;//endereço da instrução
 	int aux;
@@ -382,8 +531,8 @@ void abrir_arquivo(Linha* lin) {
 	FILE* res;
 
 	/*segunda leitura do arquivo para a codificação das instruções com a labels resolvidas*/
-	arq = fopen("mips.txt", "r"); // arquivo com codigo mips
-	res = fopen("resultado.txt","w"); //arquivo para ser salvo a codificação hex das intruções
+	arq = fopen(cod, "r"); // arquivo com codigo mips
+	res = fopen(save,"w"); //arquivo para ser salvo a codificação hex das intruções
 
 	while(!feof(arq)) {
 		fgets(linha,100,arq); //lê uma linha por vez do arquivo

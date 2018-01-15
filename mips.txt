@@ -10,6 +10,12 @@ for_min:
 	slt $t2,$t4,$t1
 	beq $t2,$zero,passa
 	add $t1,$t4,$zero
+	lb $t0,1($s1)
+	sb $t0,1($s1)
+	and $t0,$t1,$s1
+	or $t0,$t1,$s1
+	andi $t0,$t1,1
+	ori $t0,$t1,1
 passa:
 	addi $t0,$zero,1
 	j for_min
